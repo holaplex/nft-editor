@@ -11,7 +11,6 @@ You can then run the server on your localhost to check it out!
 
 ```
 npm run dev
-
 ```
 
 ## Development

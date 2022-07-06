@@ -1,4 +1,5 @@
 import React, { FC, useMemo, useState } from 'react'
+import RenderNFTs from './components/RenderNFTs'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import {
@@ -42,12 +43,12 @@ function App() {
     <ConnectionProvider endpoint={endpoint}>
     <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-            <WalletMultiButton />
-
               <div className="App">
                 <header className="App-header">
+                  <WalletMultiButton />
                   <img src={logo} className="App-logo" alt="logo" />
                   <p>Hello Vite + React!</p>
+                  <RenderNFTs />
                   <p>
                     Edit <code>App.tsx</code> and save to test HMR updates.
                   </p>
