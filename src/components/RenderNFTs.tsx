@@ -7,9 +7,10 @@ import '../App.css';
 
 
 
-const  RenderNFTs = () => {
+const RenderNFTs = () => {
 
   const { publicKey } = useWallet();
+  
 
   const query = gql`
     query {
@@ -37,16 +38,17 @@ const  RenderNFTs = () => {
         <>
             <h1>Your NFTs Rendered Here...</h1>
             <div className="grid grid-rows-4 grid-flow-col gap-4 shadow-lg">
-            {data && data.nfts.map((nft: { name: string | null | undefined; image: string | undefined; }) => (
+            {data && data.nfts.map((nft: { name: string | null | undefined; image: string | undefined; mintAddress: string | null | undefined; }) => (
+              <a href={`/update/${nft.mintAddress}`}>
               <div>
                 <h1 className="font-bold text-2xl text-white-900">{nft.name}</h1>
                 <img className="max-h-60 max-w-60" src={nft.image}></img>
               </div>
+              </a>
             ))}
             </div>
         </>
     );
-
 }
 
 export default RenderNFTs;

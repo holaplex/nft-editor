@@ -1,5 +1,13 @@
 import React, { FC, useMemo, useState } from 'react'
 import RenderNFTs from './components/RenderNFTs'
+import Home from './components/Home';
+import UpdatePage from './components/UpdatePage';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import {
@@ -18,7 +26,6 @@ import {
   WalletMultiButton
 } from '@solana/wallet-adapter-react-ui'
 import { clusterApiUrl } from '@solana/web3.js'
-import logo from './logo.svg'
 import './App.css'
 
 import '@solana/wallet-adapter-react-ui/styles.css'
@@ -41,40 +48,20 @@ function App() {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-    <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-              <div className="App">
-                <header className="App-header">
-                  <WalletMultiButton />
-                  <img src={logo} className="App-logo" alt="logo" />
-                  <p>Hello Vite + React!</p>
-                  <RenderNFTs />
-                  <p>
-                    Edit <code>App.tsx</code> and save to test HMR updates.
-                  </p>
-                  <p>
-                    <a
-                      className="App-link"
-                      href="https://reactjs.org"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Learn React
-                    </a>
-                    {' | '}
-                    <a
-                      className="App-link"
-                      href="https://vitejs.dev/guide/features.html"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Vite Docs
-                    </a>
-                  </p>
-                </header>
-              </div>
+      <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+              <Router>
+                <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route exact path="/update/:mintAddress">
+                  <UpdatePage />
+                </Route>
+                </Switch>
+              </Router>
           </WalletModalProvider>
-        </WalletProvider>
+      </WalletProvider>
     </ConnectionProvider>
 
   )
