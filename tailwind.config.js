@@ -3,5 +3,11 @@ module.exports = {
     theme: {
       extend: {},
     },
+    module: {
+      rules: [
+        {test: /\.css$/, loader: 'css-loader'},
+        {test: /\.svg$/, loader: 'file-loader'}
+      ]
+    },
     plugins: [],
   }

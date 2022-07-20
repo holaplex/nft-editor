@@ -13,7 +13,7 @@ const Home = () => {
                 <header className="App-header">
                   <WalletMultiButton />
                   <img src={logo} className="App-logo" alt="logo" />
-                  <p>Hello Vite + React!</p>
+                  <p>Please select one of your updatable NFTs</p>
                   <RenderNFTs />
                   <p>
                     Edit <code>App.tsx</code> and save to test HMR updates.

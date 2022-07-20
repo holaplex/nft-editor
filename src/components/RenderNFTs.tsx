@@ -36,7 +36,6 @@ const RenderNFTs = () => {
 
     return (
         <>
-            <h1>Your NFTs Rendered Here...</h1>
             <div className="grid grid-rows-4 grid-flow-col gap-4 shadow-lg">
             {data && data.nfts.map((nft: { name: string | null | undefined; image: string | undefined; mintAddress: string | null | undefined; }) => (
               <a href={`/update/${nft.mintAddress}`}>
