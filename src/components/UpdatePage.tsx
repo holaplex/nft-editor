@@ -5,7 +5,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, clusterApiUrl, Keypair, PublicKey } from "@solana/web3.js";
 import { Metaplex, keypairIdentity, walletAdapterIdentity, bundlrStorage, Task, Nft } from "@metaplex-foundation/js";
 import { SignerWalletAdapter } from '@solana/wallet-adapter-base';
-
+import { JsonForms } from '@jsonforms/react'
+import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 
 const UpdatePage = () => {
     const { mintAddress }: any = useParams();
@@ -50,6 +51,81 @@ const UpdatePage = () => {
         return
     }
 
+    const schema = {
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string'
+          },
+          description: {
+            type: 'string'
+          },
+          external_url: {
+            type: 'string'
+          },
+          symbol: {
+            type: 'string'
+          },
+          category: {
+            type: 'string',
+            enum: ['audio', 'image', 'html', 'video', 'vr']
+          },
+          attributes: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                trait_type: {
+                  type: 'string'
+                },
+                value: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        }
+      }
+
+    const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+        ,
+        {
+        type: 'Control',
+        scope: '#/properties/name'
+        },
+        {
+        type: 'Control',
+        scope: '#/properties/description'
+        },
+        {
+        type: 'HorizontalLayout',
+        elements: [
+            {
+            type: 'Control',
+            scope: '#/properties/external_url'
+            },
+            {
+            type: 'Control',
+            scope: '#/properties/symbol'
+            }
+        ]
+        },
+        {
+        type: 'Control',
+        scope: '#/properties/category'
+        },
+        {
+        type: 'Control',
+        scope: '#/properties/attributes',
+        options: {
+            showSortButtons: true
+        }
+        }
+        ]
+    }
+
     return (
         <div>
             <div className="App">
@@ -59,6 +135,17 @@ const UpdatePage = () => {
                     <form className="rounded px-8 pt-6 pb-8 mb-4">
                         <input onChange={(e)=> {setNftName(e.target.value)}} className="shadow my-8 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Name">
                         </input>
+                        <JsonForms
+                            schema={schema}
+                            uischema={uischema}
+                            data={yourJson}
+                            renderers={materialRenderers}
+                            cells={materialCells}
+                            validationMode={'NoValidation'}
+                            onChange={({ data }) => {
+                                console.log(data)
+                            }}
+                        />
                         <button onClick={submitUpdate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                             Update
                         </button> 
