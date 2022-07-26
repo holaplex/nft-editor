@@ -27,12 +27,10 @@ const UpdatePage = () => {
         const mAddress = new PublicKey(mintAddress);
         const task = metaplex.nfts().findByMint(mAddress);
         const foundNft = await task.run();
-        console.log('found', foundNft);
         return foundNft;
     }
 
     async function updateNft(ourNft: Nft) {
-        console.log('this better not be undefined', ourNft);
 
         const { uri: newUri } = await metaplex
         .nfts()
@@ -40,8 +38,6 @@ const UpdatePage = () => {
             nftMetadata,
         })
         .run();
-
-        console.log("uri is", newUri);
 
         const { nft: updatedNft } = await metaplex
             .nfts()
