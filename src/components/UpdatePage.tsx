@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useParams } from "react-router-dom";
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -12,6 +12,8 @@ const UpdatePage = () => {
     const { mintAddress }: any = useParams();
     const [nftName, setNftName] = useState("");
     const [nftJson, setNftJson] = useState("");
+    const [nftMetadata, setNftMetadata]: any = useState();
+    
 
     const connection = new Connection(clusterApiUrl("mainnet-beta"));
 
@@ -32,12 +34,19 @@ const UpdatePage = () => {
     async function updateNft(ourNft: Nft) {
         console.log('this better not be undefined', ourNft);
 
-
-        const { nft: updatedNft } = await metaplex
+        const { uri: newUri } = await metaplex
         .nfts()
-        .update(ourNft, { name: nftName })
+        .uploadMetadata({
+            nftMetadata,
+        })
         .run();
 
+        console.log("uri is", newUri);
+
+        const { nft: updatedNft } = await metaplex
+            .nfts()
+            .update(ourNft, { uri: newUri })
+            .run();
     }
 
     const submitUpdate = async () => {
@@ -47,9 +56,16 @@ const UpdatePage = () => {
 
     const yourJson = {zac: "hi"}
 
-    const jsonChange = () => {
-        return
-    }
+    useEffect(() => {
+        async function fillForm() {
+            const ourNft = await fetchNft();
+            setNftMetadata(ourNft.json);
+        }
+
+        fillForm();
+
+    },[])
+    
 
     const schema = {
         type: 'object',
@@ -64,6 +80,9 @@ const UpdatePage = () => {
             type: 'string'
           },
           symbol: {
+            type: 'string'
+          },
+          image: {
             type: 'string'
           },
           category: {
@@ -113,8 +132,8 @@ const UpdatePage = () => {
         ]
         },
         {
-        type: 'Control',
-        scope: '#/properties/category'
+            type: 'Control',
+            scope: '#/properties/image'
         },
         {
         type: 'Control',
@@ -133,17 +152,15 @@ const UpdatePage = () => {
                   <WalletMultiButton />
                   <p><b>Update NFT with Mint Address: </b><u>{mintAddress}</u></p>
                     <form className="rounded px-8 pt-6 pb-8 mb-4">
-                        <input onChange={(e)=> {setNftName(e.target.value)}} className="shadow my-8 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Name">
-                        </input>
                         <JsonForms
                             schema={schema}
                             uischema={uischema}
-                            data={yourJson}
+                            data={nftMetadata}
                             renderers={materialRenderers}
                             cells={materialCells}
                             validationMode={'NoValidation'}
                             onChange={({ data }) => {
-                                console.log(data)
+                                setNftMetadata(data);
                             }}
                         />
                         <button onClick={submitUpdate} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
